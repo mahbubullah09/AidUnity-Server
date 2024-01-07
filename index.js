@@ -81,6 +81,28 @@ async function run() {
       const result = await aidCollection.deleteOne(query)
       res.send(result);
     })
+
+    app.put('/aids/:id', async(req,res)=>{
+        const id = req.params.id;
+        console.log(id);
+        const filter ={_id : new ObjectId(id)}
+        const options = {upsert: true};
+        const updateAids= req.body;
+        const info ={
+            $set: {
+                 title: updateAids.title, 
+                 picture: updateAids.picture, 
+                price: updateAids.external_link, 
+                description: updateAids.description, 
+                category: updateAids.category, 
+               
+            }
+        }
+      
+        const result = await aidCollection.updateOne(filter, info)
+        
+        res.send(result);
+      })
       
 
 
