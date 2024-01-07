@@ -34,14 +34,15 @@ async function run() {
     //DB Collection
     const aidCollection = client.db('AidUnity').collection('Aids');
 
-
-
+//get aids
     app.get('/aids', async(req,res)=>{
         const cursor = aidCollection.find();
         const result = await cursor.toArray();
         res.send(result);
     })
 
+
+    //search aids
     app.get('/aids/search', async (req,res)=>{
 
         const filter = req.query
@@ -50,10 +51,20 @@ async function run() {
            
             'category': {$regex: filter.search , $options: 'i'}
             }
-        const cursor = productsCollection.find(query);
+        const cursor = aidCollection.find(query);
         const result = await cursor.toArray();
         res.send(result);
     })
+
+    //post aids
+
+    app.post('/aids', async (req,res) =>{
+        const aids = req.body;
+        console.log(aids);
+        const result = await aidCollection.insertOne(aids)
+        res.send(result);
+      })
+      
 
 
 
