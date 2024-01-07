@@ -35,6 +35,7 @@ async function run() {
     const aidCollection = client.db('AidUnity').collection('Aids');
     const eventCollection = client.db('AidUnity').collection('Events');
     const postCollection = client.db('AidUnity').collection('Posts');
+    const commentCollection = client.db('AidUnity').collection('Comments');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -160,7 +161,8 @@ async function run() {
             
             res.send(result);
           })
-              //post event
+    
+      //post 
 
      app.post('/posts', async (req,res) =>{
         const event = req.body;
@@ -168,6 +170,49 @@ async function run() {
         const result = await postCollection.insertOne(event)
         res.send(result);
       })
+
+    //get posts
+    app.get('/posts', async(req,res)=>{
+        const cursor = postCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+      
+      
+      //comments 
+
+     app.post('/comments', async (req,res) =>{
+        const event = req.body;
+        console.log(event);
+        const result = await commentCollection.insertOne(event)
+        res.send(result);
+      })
+
+    //get posts
+    app.get('/comments', async(req,res)=>{
+        const cursor = commentCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+//     app.get('/comments/:id', async (req,res) =>{
+//         const id = req.params.id;
+//   const filter ={postID : id}
+//         const result = await commentCollection.find(filter).toArray();
+//       res.send(result);
+//       })
+
+
+      app.get('/comments/posts', async (req,res) =>{
+        let query= {};
+      
+      if(req.query?.postID){
+          query = {postID: req.query.postID}
+      }
+        const result = await commentCollection.find(query).toArray();
+      res.send(result);
+      })
+      
 
       
       
