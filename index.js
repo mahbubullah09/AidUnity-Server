@@ -93,7 +93,7 @@ async function run() {
             $set: {
                  title: updateAids.title, 
                  picture: updateAids.picture, 
-                price: updateAids.external_link, 
+                price: updateAids.price, 
                 description: updateAids.description, 
                 category: updateAids.category, 
                
@@ -135,6 +135,28 @@ async function run() {
             const query = { _id: new ObjectId(id)}
           
             const result = await eventCollection.deleteOne(query)
+            res.send(result);
+          })
+
+          app.put('/events/:id', async(req,res)=>{
+            const id = req.params.id;
+            console.log(id);
+            const filter ={_id : new ObjectId(id)}
+            const options = {upsert: true};
+            const updateAids= req.body;
+            const info ={
+                $set: {
+                     title: updateAids.title, 
+                     date: updateAids.date, 
+                  
+                    description: updateAids.description, 
+               
+                   
+                }
+            }
+          
+            const result = await eventCollection.updateOne(filter, info)
+            
             res.send(result);
           })
       
