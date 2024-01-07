@@ -34,6 +34,7 @@ async function run() {
     //DB Collection
     const aidCollection = client.db('AidUnity').collection('Aids');
     const eventCollection = client.db('AidUnity').collection('Events');
+    const postCollection = client.db('AidUnity').collection('Posts');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -159,6 +160,15 @@ async function run() {
             
             res.send(result);
           })
+              //post event
+
+     app.post('/posts', async (req,res) =>{
+        const event = req.body;
+        console.log(event);
+        const result = await postCollection.insertOne(event)
+        res.send(result);
+      })
+
       
       
 
