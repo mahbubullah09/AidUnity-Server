@@ -33,6 +33,7 @@ async function run() {
 
     //DB Collection
     const aidCollection = client.db('AidUnity').collection('Aids');
+    const eventCollection = client.db('AidUnity').collection('Events');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -103,6 +104,31 @@ async function run() {
         
         res.send(result);
       })
+
+      //get event
+    app.get('/event', async(req,res)=>{
+        const cursor = eventCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+
+     //post event
+
+     app.post('/event', async (req,res) =>{
+        const event = req.body;
+        console.log(event);
+        const result = await eventCollection.insertOne(event)
+        res.send(result);
+      })
+
+      app.get('/event/:id', async(req,res) =>{
+        const id = req.params.id;
+        console.log(res.params);
+        const query = { _id: new ObjectId(id)}
+        const result = await eventCollection.findOne(query);
+        res.send(result)
+    })
       
 
 
