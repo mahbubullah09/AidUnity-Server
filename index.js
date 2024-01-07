@@ -106,7 +106,7 @@ async function run() {
       })
 
       //get event
-    app.get('/event', async(req,res)=>{
+    app.get('/events', async(req,res)=>{
         const cursor = eventCollection.find();
         const result = await cursor.toArray();
         res.send(result);
@@ -115,20 +115,29 @@ async function run() {
 
      //post event
 
-     app.post('/event', async (req,res) =>{
+     app.post('/events', async (req,res) =>{
         const event = req.body;
         console.log(event);
         const result = await eventCollection.insertOne(event)
         res.send(result);
       })
 
-      app.get('/event/:id', async(req,res) =>{
+      app.get('/events/:id', async(req,res) =>{
         const id = req.params.id;
         console.log(res.params);
         const query = { _id: new ObjectId(id)}
         const result = await eventCollection.findOne(query);
         res.send(result)
     })
+        //delete all event by id
+        app.delete('/events/:id', async (req,res) =>{
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id)}
+          
+            const result = await eventCollection.deleteOne(query)
+            res.send(result);
+          })
+      
       
 
 
