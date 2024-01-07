@@ -64,6 +64,23 @@ async function run() {
         const result = await aidCollection.insertOne(aids)
         res.send(result);
       })
+
+      app.get('/aids/:id', async(req,res) =>{
+        const id = req.params.id;
+        console.log(res.params);
+        const query = { _id: new ObjectId(id)}
+        const result = await aidCollection.findOne(query);
+        res.send(result)
+    })
+    
+    //delete all product by id
+    app.delete('/aids/:id', async (req,res) =>{
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id)}
+    
+      const result = await aidCollection.deleteOne(query)
+      res.send(result);
+    })
       
 
 
