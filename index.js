@@ -38,6 +38,7 @@ async function run() {
     const commentCollection = client.db('AidUnity').collection('Comments');
     const likeCollection = client.db('AidUnity').collection('Likes');
     const dislikeCollection = client.db('AidUnity').collection('DisLikes');
+    const volunteerCollection = client.db('AidUnity').collection('Volunteer');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -205,6 +206,46 @@ async function run() {
         }
       
         const result = await postCollection.updateOne(filter, info)
+        
+        res.send(result);
+      })
+      //post volunteer
+
+     app.post('/volunteer', async (req,res) =>{
+        const event = req.body;
+        console.log(event);
+        const result = await volunteerCollection.insertOne(event)
+        res.send(result);
+      })
+
+    //get volunteer
+    app.get('/volunteer', async(req,res)=>{
+        const cursor = volunteerCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    app.put('/volunteer/:id', async(req,res)=>{
+        const id = req.params.id;
+        console.log(id);
+        const filter ={_id : new ObjectId(id)}
+        const options = {upsert: true};
+        const updateVolunteer= req.body;
+        const info ={
+            $set: {
+                 eventID: updateVolunteer=title, 
+                 userImage: updateVolunteer=userImage, 
+                 userName: updateVolunteer=userName,  
+                 userEmail: updateVolunteer=userEmail,
+                 Status: updateVolunteer= Status
+
+                
+           
+               
+            }
+        }
+      
+        const result = await volunteerCollection.updateOne(filter, info)
         
         res.send(result);
       })
