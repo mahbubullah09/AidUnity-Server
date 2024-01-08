@@ -36,6 +36,7 @@ async function run() {
     const eventCollection = client.db('AidUnity').collection('Events');
     const postCollection = client.db('AidUnity').collection('Posts');
     const commentCollection = client.db('AidUnity').collection('Comments');
+    const likeCollection = client.db('AidUnity').collection('Likes');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -178,6 +179,34 @@ async function run() {
         res.send(result);
     })
 
+    app.put('/posts/:id', async(req,res)=>{
+        const id = req.params.id;
+        console.log(id);
+        const filter ={_id : new ObjectId(id)}
+        const options = {upsert: true};
+        const updatePosts= req.body;
+        const info ={
+            $set: {
+                 title: updatePosts.title, 
+                 image: updatePosts.image, 
+                 userImage: updatePosts.userImage, 
+                 userName: updatePosts.userName, 
+                 like: updatePosts.like, 
+                 dislike: updatePosts.dislike, 
+
+                 time: updatePosts.time, 
+              
+                datails: updatePosts.datails, 
+           
+               
+            }
+        }
+      
+        const result = await postCollection.updateOne(filter, info)
+        
+        res.send(result);
+      })
+
       
       
       //comments 
@@ -212,6 +241,17 @@ async function run() {
         const result = await commentCollection.find(query).toArray();
       res.send(result);
       })
+
+      //post Like
+app.post('/likes', async (req,res) =>{
+    const like = req.body;
+    console.log(like);
+    const result = await likeCollection.insertOne(like)
+    res.send(result);
+  })
+  
+
+      
       
 
       
