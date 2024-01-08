@@ -37,6 +37,7 @@ async function run() {
     const postCollection = client.db('AidUnity').collection('Posts');
     const commentCollection = client.db('AidUnity').collection('Comments');
     const likeCollection = client.db('AidUnity').collection('Likes');
+    const dislikeCollection = client.db('AidUnity').collection('DisLikes');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -224,12 +225,7 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
-//     app.get('/comments/:id', async (req,res) =>{
-//         const id = req.params.id;
-//   const filter ={postID : id}
-//         const result = await commentCollection.find(filter).toArray();
-//       res.send(result);
-//       })
+
 
 
       app.get('/comments/posts', async (req,res) =>{
@@ -248,6 +244,54 @@ app.post('/likes', async (req,res) =>{
     console.log(like);
     const result = await likeCollection.insertOne(like)
     res.send(result);
+  })
+
+  app.get('/likes', async (req,res)=>{
+  
+    const cursor = likeCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+    })
+
+
+
+  app.get('/likes/email', async (req,res) =>{
+    let query= {};
+  
+  if(req.query?.userEmail){
+      query = {userEmail: req.query.userEmail}
+  }
+    const result = await likeCollection.find(query).toArray();
+  res.send(result);
+  })
+  
+
+      
+      //post DisLike
+app.post('/dislikes', async (req,res) =>{
+    const like = req.body;
+    console.log(like);
+    const result = await dislikeCollection.insertOne(like)
+    res.send(result);
+  })
+
+  app.get('/dislikes', async (req,res)=>{
+  
+    const cursor = dislikeCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+    })
+
+
+
+  app.get('/dislikes/email', async (req,res) =>{
+    let query= {};
+  
+  if(req.query?.userEmail){
+      query = {userEmail: req.query.userEmail}
+  }
+    const result = await dislikeCollection.find(query).toArray();
+  res.send(result);
   })
   
 
