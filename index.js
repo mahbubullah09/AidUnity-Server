@@ -39,6 +39,7 @@ async function run() {
     const likeCollection = client.db('AidUnity').collection('Likes');
     const dislikeCollection = client.db('AidUnity').collection('DisLikes');
     const volunteerCollection = client.db('AidUnity').collection('Volunteer');
+    const paymentCollection = client.db('AidUnity').collection('Payment');
 
 //get aids
     app.get('/aids', async(req,res)=>{
@@ -376,6 +377,33 @@ app.post('/dislikes', async (req,res) =>{
       query = {userEmail: req.query.userEmail}
   }
     const result = await dislikeCollection.find(query).toArray();
+  res.send(result);
+  })
+
+
+  app.post('/payments', async (req,res) =>{
+    const like = req.body;
+    console.log(like);
+    const result = await paymentCollection.insertOne(like)
+    res.send(result);
+  })
+
+  app.get('/payments', async (req,res)=>{
+  
+    const cursor = paymentCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+    })
+
+
+
+  app.get('/payments/email', async (req,res) =>{
+    let query= {};
+  
+  if(req.query?.userEmail){
+      query = {userEmail: req.query.userEmail}
+  }
+    const result = await paymentCollection.find(query).toArray();
   res.send(result);
   })
   
