@@ -400,8 +400,8 @@ app.post('/dislikes', async (req,res) =>{
   app.get('/payments/email', async (req,res) =>{
     let query= {};
   
-  if(req.query?.userEmail){
-      query = {userEmail: req.query.userEmail}
+  if(req.query?.email){
+      query = {email: req.query.email}
   }
     const result = await paymentCollection.find(query).toArray();
   res.send(result);
