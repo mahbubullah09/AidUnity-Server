@@ -200,8 +200,7 @@ async function run() {
                  time: updatePosts.time, 
               
                 datails: updatePosts.datails, 
-           
-               
+
             }
         }
       
@@ -224,6 +223,11 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    
+
+
+
+    
 
     app.put('/volunteer/:id', async(req,res)=>{
         const id = req.params.id;
@@ -233,11 +237,11 @@ async function run() {
         const updateVolunteer= req.body;
         const info ={
             $set: {
-                 eventID: updateVolunteer=title, 
-                 userImage: updateVolunteer=userImage, 
-                 userName: updateVolunteer=userName,  
-                 userEmail: updateVolunteer=userEmail,
-                 Status: updateVolunteer= Status
+                 eventID: updateVolunteer.eventID, 
+                 userImage: updateVolunteer.userImage, 
+                 userName: updateVolunteer.userName,  
+                 userEmail: updateVolunteer.userEmail,
+                 Status: updateVolunteer.Status
 
                 
            
@@ -249,6 +253,36 @@ async function run() {
         
         res.send(result);
       })
+
+      app.get('/volunteer/event', async (req,res) =>{
+        let query= {};
+      
+      if(req.query?.eventID){
+          query = {eventID: req.query.eventID}
+      }
+        const result = await volunteerCollection.find(query).toArray();
+      res.send(result);
+      })
+
+      
+      app.get('/volunteer/event/email', async (req,res) =>{
+        let query= {};
+      
+      if(req.query?.volunteerEmail){
+          query = {volunteerEmail: req.query.volunteerEmail}
+      }
+        const result = await volunteerCollection.find(query).toArray();
+      res.send(result);
+      })
+
+      app.delete('/posts/:id', async (req,res) =>{
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id)}
+      
+        const result = await postCollection.deleteOne(query)
+        res.send(result);
+      })
+  
 
       app.delete('/posts/:id', async (req,res) =>{
         const id = req.params.id;
